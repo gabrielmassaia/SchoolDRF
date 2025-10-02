@@ -1,11 +1,11 @@
-# 📚 API Rest em Django
+# API Rest em Django
 
 Este projeto é uma API REST desenvolvida em **Python** utilizando o **Django** e o **Django REST Framework (DRF)**.  
 Ele serve como base para criação de aplicações escaláveis e organizadas, seguindo boas práticas de desenvolvimento.
 
 ---
 
-## 🚀 Como rodar o projeto
+## Como rodar o projeto
 
 ### 1. Clonar o repositório
 
@@ -72,7 +72,7 @@ python manage.py runserver
 ```
 
 O projeto estará disponível em:
-👉 [http://localhost:8000](http://localhost:8000)
+[http://localhost:8000](http://localhost:8000)
 
 ---
 
@@ -85,7 +85,7 @@ O projeto estará disponível em:
 
 ---
 
-## 📌 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 src/
@@ -99,13 +99,3 @@ src/
 ```
 
 ---
-
-## 🤝 Contribuindo
-
-Sinta-se à vontade para abrir **issues** e **pull requests**.
-Sugestões e melhorias são sempre bem-vindas! 🚀
-
-```
-
----
-```
