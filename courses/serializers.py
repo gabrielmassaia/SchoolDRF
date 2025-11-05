@@ -24,10 +24,13 @@ class AvaliacaoSerializer(serializers.ModelSerializer):
 class CursoSerializer(serializers.ModelSerializer):
 
     #1. Nested Relationship
-    avaliacoes = AvaliacaoSerializer(many=True, read_only=True)
+    # avaliacoes = AvaliacaoSerializer(many=True, read_only=True)
     #2. Hyperlinked Relationship
-    url = serializers.HyperlinkedIdentityField(view_name='curso', lookup_field='id')
+    # url = serializers.HyperlinkedIdentityField(view_name='curso', lookup_field='id')
     #3. Custom Field
+    avaliacoes = serializers.PrimaryKeyRelatedField(Many=True, read_only=True)
+    
+
     def get_avaliacoes_count(self, obj):
         return obj.avaliacoes.count()
     class Meta:

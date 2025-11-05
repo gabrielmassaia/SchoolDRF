@@ -1,0 +1,9 @@
+{
+  "python.defaultInterpreterPath": "/home/gabriel/ApiRestPython/env/bin/python",
+  "python.analysis.extraPaths": ["./env/lib/python3.12/site-packages"],
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.useLibraryCodeForTypes": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.indexing": true
+}
