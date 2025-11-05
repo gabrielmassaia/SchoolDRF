@@ -1,4 +1,7 @@
 import pytest
+from datetime import date, timedelta
+from src.library.clock import FixedClock
+from src.library.clock import Clock
 
 from src.library.exceptions import LimiteEmprestimosAtingido, PagamentoRecusado, SemCopiasDisponiveis
 
@@ -29,3 +32,24 @@ def test_pagamento_recusado_dispara_excecao(service, payment_gateway_mock):
     with pytest.raises(PagamentoRecusado):
         service.registrar_devolucao(emprestimo.id)
 
+def test_avancar_dias_padrao():
+    hoje = date(2024, 1, 1)
+    clock = FixedClock(hoje)
+
+    clock.avancar()
+
+    assert clock.hoje() == hoje + timedelta(days=1)
+
+
+def test_avancar_dias_personalizado():
+    hoje = date(2024, 1, 1)
+    clock = FixedClock(hoje)
+    clock.avancar(5)
+    assert clock.hoje() == hoje + timedelta(days=5)
+
+def test_clock_hoje_retorna_data_atual(monkeypatch):
+    fixed_date = date(2024, 1, 1)
+    monkeypatch.setattr("src.library.clock.date", type("MockDate", (), {"today": staticmethod(lambda: fixed_date)}))
+    
+    clock = Clock()
+    assert clock.hoje() == fixed_date
