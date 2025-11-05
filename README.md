@@ -17,7 +17,7 @@ Este repositório contém a entrega integral do trabalho de testes solicitado: u
 | 7    | Teste de performance com `time.perf_counter` marcado como lento | `tests/test_performance_relatorio.py::test_exportar_relatorio_eh_rapido` medindo tempo e marcado com `slow`                                          |
 | 8    | Cobertura de linhas e ramos com meta ≥80% / ≥70%                | `.coveragerc` restringe a análise ao módulo `src/library`, e o relatório gerado por `coverage report` deve respeitar as metas (validar via CI/local) |
 | 9    | Pipeline de CI com testes + artefatos de cobertura              | `.github/workflows/ci.yml` executa pytest com coverage e publica `htmlcov` + `coverage.xml`                                                          |
-| 10   | README/documentação + roteiro de apresentação                   | Este README traz instruções completas; `docs/pitch.md` descreve o pitch e agora inclui um passo a passo de execução                                  |
+| 10   | README/documentação + roteiro de apresentação                   | Este README traz instruções completas; `docs/pitch.md` descreve o pitch e inclui um passo a passo de execução                                        |
 
 > **Observações**:
 >
@@ -26,7 +26,7 @@ Este repositório contém a entrega integral do trabalho de testes solicitado: u
 
 ---
 
-## 🛠️ Preparação do ambiente
+## Preparação do ambiente
 
 1. **Criar e ativar** um ambiente virtual de preferência (ex.: `python -m venv .venv`).
    - Linux/macOS: `source .venv/bin/activate`
@@ -46,7 +46,11 @@ coverage run -m pytest -q
 coverage report            # resumo no terminal
 coverage html              # gera htmlcov/
 coverage xml               # gera coverage.xml
+
 ```
+
+Para validar roda: python -m http.server 8000
+e visualiza no navegador: http://localhost:8000/htmlcov
 
 - Para abrir o relatório HTML, utilize `htmlcov/index.html`.
 - Para focar apenas em testes rápidos: `pytest -m "not slow"`.
