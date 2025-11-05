@@ -49,6 +49,8 @@ coverage report            # resumo no terminal
 coverage html              # gera htmlcov/
 coverage xml               # gera coverage.xml
 
+Testando
+
 ```
 
 Para validar roda: python -m http.server 8000
