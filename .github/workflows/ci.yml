@@ -8,11 +8,9 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
-
     defaults:
       run:
-        working-directory: python
-
+        working-directory: .
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,4 +30,3 @@ jobs:
           path: |
             htmlcov
             coverage.xml
-

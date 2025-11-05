@@ -19,7 +19,9 @@ Este repositório contém a entrega integral do trabalho de testes solicitado: u
 | 9 | Pipeline de CI com testes + artefatos de cobertura | `.github/workflows/ci.yml` executa pytest com coverage e publica `htmlcov` + `coverage.xml` |
 | 10 | README/documentação + roteiro de apresentação | Este README traz instruções completas; `docs/pitch.md` descreve o pitch e agora inclui um passo a passo de execução |
 
-> **Observação**: não há componentes frontend/HTML no projeto; toda a interação é orientada a código e testes automatizados.
+> **Observações**:
+> - não há componentes frontend/HTML no projeto; toda a interação é orientada a código e testes automatizados;
+> - toda a execução (local ou no CI) ocorre diretamente a partir da raiz do repositório — não existe mais um diretório `python/` separado.
 
 ---
 
