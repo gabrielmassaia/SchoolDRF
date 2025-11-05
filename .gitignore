@@ -1,6 +1,73 @@
+# ======================================
+#  PYTHON / PYTEST / COVERAGE
+# ======================================
+
+# Compilados Python
 __pycache__/
 *.pyc
-htmlcov/
+*.pyo
+*.pyd
+
+# Caches de testes
+.pytest_cache/
+.coverage
+.cache/
 coverage.xml
+htmlcov/
+
+# Logs
+*.log
+
+# Ambientes virtuais
 .venv/
-.env
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Build e distribuição
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Configurações locais
+*.env
+*.env.*
+.envrc
+.secret
+secrets.json
+
+# ======================================
+#  TOOLS
+# ======================================
+
+# Coverage.py
+.coverage.*
+coverage.json
+
+# mypy / pytype / pylance
+.mypy_cache/
+.pytype/
+.dmypy.json
+dmypy.json
+
+# VSCode / PyCharm / IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# ======================================
+#  CI / RELATÓRIOS / TEMP
+# ======================================
+
+# Relatórios e artefatos de CI
+*.xml
+*.html
+*.json
+
+# Backup / temporários
+*.bak
+*.swp
+*~
