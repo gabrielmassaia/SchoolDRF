@@ -34,9 +34,12 @@
 6. Apresentar os artefatos de cobertura publicados pelo CI (pasta `htmlcov` ou artefato do GitHub Actions).
 
 ## 5. Desafios, Aprendizados e Próximos Passos
+
 - **Desafios**: conciliar regras de negócio (estoque, multa e limite) mantendo testes independentes e rápidos.
 - **Aprendizados**: uso disciplinado de TDD (commits vermelho → verde → refatorar) e organização de doubles (stubs/mocks) para isolamento.
 - **Melhorias futuras**:
   - Adicionar teste de propriedade para valores aleatórios de atraso.
   - Simular envio de relatórios para múltiplos administradores usando parametrização adicional.
   - Explorar mutação com `mutmut` como métrica complementar de qualidade.
+
+
