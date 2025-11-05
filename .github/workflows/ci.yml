@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+    branches: [ main, master, work ]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+      - name: Executar testes com cobertura
+        run: |
+          coverage run -m pytest -q
+          coverage html
+          coverage xml
+      - name: Publicar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-python
+          path: |
+            python/htmlcov
+            python/coverage.xml
+
