@@ -1,153 +1,113 @@
 # Trabalho de Testes - Biblioteca (pytest)
 
-Este repositório implementa o trabalho prático de testes de software solicitado pela disciplina. O cenário modela uma **biblioteca** com as entidades `Livro`, `Usuario` e `Emprestimo`, contemplando regras de limite por usuário, cálculo de multa progressiva e notificação por e-mail. Todo o desenvolvimento foi conduzido com foco em testes automatizados e integrações simuladas.
+Este repositório contém a entrega integral do trabalho de testes solicitado: um domínio de **biblioteca** com regras de limite de empréstimos, cálculo de multa progressiva, controle de estoque e notificações via e-mail simulado. Todo o desenvolvimento foi conduzido com foco em testes automatizados, doubles de dependência e execução em integração contínua.
 
 ---
 
-## 🚀 Como executar os testes
+## ✅ Conformidade com os requisitos do trabalho
 
-### 1. Preparar ambiente
+| Item | Descrição | Implementação no repositório |
+|------|-----------|-------------------------------|
+| 1 | Ciclo de vida de testes com fixtures e `tmp_path` | `tests/conftest.py` define fixtures de escopo `function`, incluindo uso de `tmp_path` em `relatorio_em_tmp_path` |
+| 2 | TDD com commits vermelho → verde → refatorar | Histórico git da branch `work` preserva commits sequenciais demonstrando o ciclo solicitado |
+| 3 | Testes de exceção | `tests/test_excecoes.py` cobre estoque insuficiente, limite por usuário e pagamento negado |
+| 4 | Testes parametrizados | `tests/test_multa_parametrizada.py` usa `@pytest.mark.parametrize` para valores-limite de atraso |
+| 5 | Stubs & mocks (e-mail, pagamento, relógio) | `tests/conftest.py` fornece `StubEmailService`, `MockPaymentGateway` e `FixedClock` controlado |
+| 6 | Integração ponta-a-ponta em memória | `tests/test_integracao.py` valida o fluxo completo sem serviços reais |
+| 7 | Teste de performance com `time.perf_counter` marcado como lento | `tests/test_performance_relatorio.py::test_exportar_relatorio_eh_rapido` medindo tempo e marcado com `slow` |
+| 8 | Cobertura de linhas e ramos com meta ≥80% / ≥70% | `.coveragerc` restringe a análise ao módulo `src/library`, e o relatório gerado por `coverage report` deve respeitar as metas (validar via CI/local) |
+| 9 | Pipeline de CI com testes + artefatos de cobertura | `.github/workflows/ci.yml` executa pytest com coverage e publica `htmlcov` + `coverage.xml` |
+| 10 | README/documentação + roteiro de apresentação | Este README traz instruções completas; `docs/pitch.md` descreve o pitch e agora inclui um passo a passo de execução |
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
-```
-
-### 2. Rodar a suíte com cobertura
-
-```bash
-coverage run -m pytest
-coverage report
-coverage html   # gera htmlcov/
-coverage xml    # gera coverage.xml
-```
-
-- Para pular testes lentos: `pytest -m "not slow"`.
-- O relatório HTML pode ser aberto em `htmlcov/index.html`.
+> **Observação**: não há componentes frontend/HTML no projeto; toda a interação é orientada a código e testes automatizados.
 
 ---
 
-## 🧪 Mapa dos testes
+## 🛠️ Preparação do ambiente
 
-| Arquivo | Objetivo principal |
-|---------|-------------------|
-| `tests/test_multa_parametrizada.py` | Testes parametrizados do cálculo de multa e validação de valores-limite. |
-| `tests/test_excecoes.py` | Garantia das exceções para estoque, limite de empréstimos e pagamento negado. |
-| `tests/test_integracao.py` | Fluxo ponta-a-ponta com repositórios em memória, stub de e-mail e relógio controlado. |
-| `tests/test_performance_relatorio.py` | Mede tempo de execução de relatório usando `time.perf_counter` e marcação `slow`. |
+1. **Criar e ativar** um ambiente virtual de preferência (ex.: `python -m venv .venv`).  
+   - Linux/macOS: `source .venv/bin/activate`  
+   - Windows PowerShell: `.venv\Scripts\Activate.ps1`
+2. **Instalar dependências**: `pip install -r requirements.txt`
 
-As fixtures vivem em `tests/conftest.py` e demonstram uso de `@pytest.fixture` com escopo de função, doubles de dependência e diretório temporário (`tmp_path`).
+As versões foram pensadas para Python 3.11, alinhado com o pipeline do GitHub Actions.
+
+---
+
+## 🧪 Execução dos testes
+
+### Rodar a suíte completa com cobertura
+```bash
+coverage run -m pytest -q
+coverage report            # resumo no terminal
+coverage html              # gera htmlcov/
+coverage xml               # gera coverage.xml
+```
+- Para abrir o relatório HTML, utilize `htmlcov/index.html`.
+- Para focar apenas em testes rápidos: `pytest -m "not slow"`.
+
+### Verificar metas de cobertura
+Após `coverage report`, confirme que o módulo `src/library` apresenta:
+- **Linhas**: ≥ 80%
+- **Branches**: ≥ 70%
+
+Esses limites são avaliados manualmente/localmente ou no artefato `coverage.xml` publicado pelo CI.
+
+---
+
+## 📂 Estrutura principal
+
+```
+├── src/
+│   └── library/
+│       ├── clock.py          # Relógio controlado (stub)
+│       ├── exceptions.py     # Exceções de domínio
+│       ├── models.py         # Entidades Livro, Usuario, Emprestimo
+│       ├── repositories.py   # Repositórios em memória
+│       └── services.py       # LibraryService com regras de negócio
+├── tests/
+│   ├── conftest.py
+│   ├── test_excecoes.py
+│   ├── test_integracao.py
+│   ├── test_multa_parametrizada.py
+│   └── test_performance_relatorio.py
+├── .coveragerc
+├── pytest.ini
+├── requirements.txt
+└── .github/workflows/ci.yml
+```
 
 ---
 
 ## 🧱 Decisões de design
 
-- **Relógio controlado**: `FixedClock` permite simular a passagem do tempo em atrasos sem depender de relógio real.
-- **Repositórios em memória**: fornecem isolamento, com `InMemoryBookRepository`, `InMemoryUserRepository` e `InMemoryLoanRepository`.
-- **Doubles explícitos**: `StubEmailService` registra mensagens enviadas e `MockPaymentGateway` controla o resultado do pagamento.
-- **Serviço central**: `LibraryService` concentra regras de negócio (limite, multa, cobrança e notificações) e expõe métodos claros para registrar e devolver empréstimos.
-- **Integração controlada**: `exportar_relatorio` usa `tmp_path` para provar escrita em disco durante os testes.
+- **Relógio controlado**: `FixedClock` permite simular a passagem do tempo e atrasos determinísticos.
+- **Repositórios em memória**: `InMemoryBookRepository`, `InMemoryUserRepository` e `InMemoryLoanRepository` garantem isolamento dos testes.
+- **Doubles explícitos**: `StubEmailService` armazena notificações e `MockPaymentGateway` controla aprovação/negação sem acessar serviços externos.
+- **Serviço central**: `LibraryService` concentra regras de negócio (limite, multa, cobrança e notificações) e expõe métodos claros para registrar/devolver empréstimos.
+- **Exportação controlada**: `exportar_relatorio` escreve em diretórios temporários durante testes utilizando `tmp_path`.
 
 ---
 
-## ⚙️ Integração Contínua
+## 📊 Integração Contínua
 
-O workflow [`ci.yml`](.github/workflows/ci.yml) executa automaticamente em cada push/PR:
-
-1. Instalação das dependências via `pip`.
-2. Execução de `coverage run -m pytest`.
-3. Geração dos relatórios `htmlcov` e `coverage.xml`.
-4. Publicação dos artefatos de cobertura para consulta.
+O workflow [`ci.yml`](.github/workflows/ci.yml) é acionado para `push` e `pull_request` nas branches principais (`main`, `master`, `work`). Ele:
+1. Configura Python 3.11.
+2. Instala dependências com `pip install -r requirements.txt`.
+3. Executa `coverage run -m pytest -q`.
+4. Gera relatórios HTML/XML de cobertura.
+5. Publica os artefatos `htmlcov` e `coverage.xml`.
 
 ---
 
 ## 📑 Documentação complementar
 
-- [`docs/pitch.md`](docs/pitch.md): roteiro sugerido para apresentação do projeto, incluindo destaques de regras de negócio, métricas e aprendizados.
+- [`docs/pitch.md`](docs/pitch.md): roteiro da apresentação, com visão do domínio, evidências dos testes e orientação de execução passo a passo para demonstrações.
 
 ---
 
 ## 🔮 Melhorias futuras
 
-
 - Adicionar testes de propriedade para o cálculo de multa com valores aleatórios controlados.
-- Automatizar análise de mutação (ex.: `mutmut`) para reforçar a qualidade.
+- Automatizar análise de mutação (ex.: `mutmut`) como métrica complementar de qualidade.
 - Expandir o serviço com relatórios para múltiplos administradores usando parametrização adicional.
-
-```
-src/
-│── env/# Ambiente virtual
-        src/
-            │── seu-projeto/        # Código fonte da aplicação
-            │   ├── manage.py
-            │   ├── settings.py
-            │   ├── urls.py
-            │   └── apps/...
-```
-
----
-
----
-
-## Trabalho de Testes - Biblioteca (pytest)
-
-Este repositório também inclui um módulo independente em `python/` utilizado para o trabalho de testes da disciplina. Ele não depende do backend Django existente e pode ser executado isoladamente.
-
-### 📦 Instalação das dependências de testes
-
-```bash
-cd python
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
-```
-
-### ▶️ Executando os testes e medindo cobertura
-
-```bash
-cd python
-coverage run -m pytest
-coverage report
-coverage html  # gera htmlcov/
-coverage xml   # gera cobertura em XML para a CI
-```
-
-- Os testes usam `pytest` com fixtures (`tests/conftest.py`) e marcadores personalizados (`slow`).
-- Para pular testes lentos: `pytest -m "not slow"`.
-- O relatório HTML fica em `python/htmlcov/index.html`.
-
-### 🧪 Mapa dos testes
-
-| Arquivo | Objetivo principal |
-|---------|-------------------|
-| `tests/test_multa_parametrizada.py` | Testes parametrizados do cálculo de multa e validação de valores inválidos. |
-| `tests/test_excecoes.py` | Tratamento de exceções para estoque, limite de empréstimos e pagamento negado. |
-| `tests/test_integracao.py` | Fluxo ponta-a-ponta com repositórios em memória, stub de e-mail e relógio controlado. |
-| `tests/test_performance_relatorio.py` | Assegura execução rápida da devolução e geração de relatório usando `time.perf_counter`. |
-
-### 🧱 Decisões de design
-
-- **Doubles explícitos**: `FixedClock` controla o tempo; `StubEmailService` registra mensagens; o gateway de pagamento é mockado com `pytest-mock`.
-- **Serviço coeso**: `LibraryService` concentra regras (limite de empréstimos, multa, notificações) e possui métodos privados (_cobrar_multa, _formatar_relatorio) para facilitar manutenção.
-- **Repositórios em memória**: garantem isolamento dos testes sem dependências externas.
-- **Relatórios exportáveis**: `exportar_relatorio` escreve em disco (via `tmp_path`) provando integração simples com I/O controlado.
-
-### ⚠️ Limitações conhecidas
-
-- Não há persistência real; os repositórios são reiniciados a cada execução.
-- O gateway de pagamento é apenas simulado; não existe integração real com serviços externos.
-- Regras de multa utilizam valor fixo (R$ 2,50/dia); novas políticas exigiriam ajustes adicionais.
-
-### 🔁 Integração Contínua
-
-O workflow `.github/workflows/ci.yml` executa automaticamente:
-1. Instalação das dependências em `python/`.
-2. `coverage run -m pytest`.
-3. Geração dos relatórios `htmlcov` e `coverage.xml`.
-4. Publicação dos artefatos de cobertura.
-
-### 📣 Preparação para o pitch
-
-Um roteiro detalhado está disponível em [`docs/pitch.md`](docs/pitch.md) com os principais tópicos da apresentação.
-
