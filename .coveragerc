@@ -1,12 +1,19 @@
 [run]
+# mede apenas o código-fonte principal
 source = src/library
 branch = True
+omit =
+    */__init__.py
+    */__pycache__/*
 
 [report]
-omit =
-    */tests/*
+# mostra porcentagens redondas e ignora linhas sem código
 show_missing = True
+skip_empty = True
+precision = 0
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
 
 [html]
 directory = htmlcov
-

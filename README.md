@@ -1,3 +1,5 @@
+![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen?style=for-the-badge)
+
 # Trabalho de Testes - Biblioteca (pytest)
 
 Este repositório contém a entrega integral do trabalho de testes solicitado: um domínio de **biblioteca** com regras de limite de empréstimos, cálculo de multa progressiva, controle de estoque e notificações via e-mail simulado. Todo o desenvolvimento foi conduzido com foco em testes automatizados, doubles de dependência e execução em integração contínua.
